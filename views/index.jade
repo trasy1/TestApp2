@@ -1,0 +1,75 @@
+extends layout
+
+block content
+    h1= title
+    p Locate Notify Solve
+    link(rel='stylesheet', href='http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css')
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    script(src='http://code.jquery.com/jquery-2.1.0.min.js')
+    script(src='http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js')
+
+
+    script.
+        $(document).ready(function () {
+            var map = L.map("map").setView([53.38790, -6.25724], 13);
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+            $.getJSON('/users/reportlist', function (data) {
+
+                reportListData = data;
+
+                $.each(data, function () {
+                    L.marker([this.Lat, this.Lon]).addTo(map);
+                });
+
+            });
+        })
+
+    #map(style='height: 500px; width: 500px;')
+
+    // Wrapper
+    #wrapper
+
+        // REPORT INFO
+        #reportInfo
+            h2 Report Info
+            p
+                strong Lon:
+                |  <span id='reportInfoLon'></span>
+                br
+                strong Lat:
+                |  <span id='reportInfoLat'></span>
+                br
+                strong Category:
+                |  <span id='reportInfoCategory'></span>
+                br
+                strong Photo:
+                |  <span id='reportInfoPhoto'></span>
+        // /REPORT INFO
+
+        // REPORT LIST
+        h2 Report List
+        #reportList
+            table
+                thead
+                    th Lon
+                    th Lat
+                    th Category
+                tbody
+        // /REPORT LIST
+
+        // ADD REPORT
+        h2 Add Report
+        #addReport
+            form
+            fieldset
+                input#inputLon(type='text', placeholder='Lon')
+                input#inputLat(type='text', placeholder='Lat')
+                br
+                input#inputCategory(type='text', placeholder='Category')
+                input#inputPhoto(type='file', placeholder='Photo')
+                br
+                button#btnAddReport Add Report
+        // /ADD REPORT
+
+    // /WRAPPER
